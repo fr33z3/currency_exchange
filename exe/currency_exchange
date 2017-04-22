@@ -1,0 +1,109 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'currency_exchange'
+require 'slop'
+
+conf = CurrencyExchange::Configuration.instance
+conf.path = File.join(ENV['HOME'], 'currency_exchange.json')
+conf.load!
+
+def api(provider_name = CurrencyExchange::ProviderMap::DEFAULT_PROVIDER)
+  provider = CurrencyExchange::ProviderMap.new.provider(provider_name)
+  CurrencyExchange::CurrencyApi.new(provider)
+end
+
+cli = CurrencyExchange::CLI.new(api)
+
+# rubocop:disable Metrics/BlockLength
+opts = Slop.parse(suppress_errors: true) do |o|
+  o.string '-p', '--provider', 'specify api provider (default: )'
+
+  o.on '-v', '--version', 'print the version' do
+    puts CurrencyExchange::VERSION
+    exit
+  end
+
+  o.on '--help', 'print help' do
+    puts o
+    exit
+  end
+
+  o.on '--providers', 'prints supported providers' do
+    CurrencyExchange::ProviderMap::PROVIDERS.keys.each do |provider|
+      if provider == CurrencyExchange::CLI::DEFAULT_PROVIDER
+        puts "#{provider} (Default)"
+      else
+        puts provider
+      end
+    end
+    exit
+  end
+
+  o.on '--printers', 'prints/sets list of supported printers' do
+    CurrencyExchange::Printers::SUPPORTED.keys.each do |printer|
+      puts printer
+      exit
+    end
+  end
+
+  o.array '--conf_set', 'sets config value (--conf_set key=value)', delimiter: '='
+
+  o.array '-prt', '--print', 'set up printers (look at supported printers)'
+  o.string '-s', '--source', 'set up source (look at supported currencies) default: USD'
+  o.array '-t', '--target', 'set up target currencies (ex: EUR,AUD) default: All supported'
+  o.string '-d', '--date', 'set up date in format YYYY-MM-DD'
+
+  o.float '-c', '--convert', 'converts given value from source to target currencies'
+  o.boolean '-l', '--list', 'returns list of supported currencies'
+  o.boolean '-h', '--highest', 'returns highest rates'
+  o.boolean '-e', '--exchange', 'returns exchange rates'
+end
+# rubocop:enable Metrics/BlockLength
+
+cli.source = opts[:source].upcase if opts.source?
+cli.target = opts[:target] if opts.target?
+cli.date = Time.new(*opts[:date].split('-')) if opts.date?
+
+if opts.provider?
+  begin
+    cli.api = api(opts[:provider])
+  rescue
+    puts "Unsupported provider #{opts[:provider]}"
+    exit
+  end
+end
+
+if opts.print?
+  printers = CurrencyExchange::Printers.supported_printers(opts[:print])
+  cli.printers = printers
+end
+
+
+if opts.conf_set?
+  key, value = opts[:conf_set][0..1]
+  conf[key] = value
+  conf.save!
+  exit
+end
+
+if opts.highest?
+  cli.highest_rates
+  exit
+end
+
+if opts.list?
+  cli.list
+  exit
+end
+
+if opts.exchange?
+  cli.exchange_rates
+  exit
+end
+
+if opts.convert? && opts[:convert]
+  cli.convert(opts[:convert])
+  exit
+end
+
+puts opts

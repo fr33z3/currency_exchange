@@ -1,15 +1,17 @@
+require 'forwardable'
+
 module CurrencyExchange
   class CurrencyApi
+    extend Forwardable
+
     def initialize(provider)
       @provider = provider
     end
 
-    def supported_currencies
-      provider.list
-    end
+    def_delegator :@provider, :list, :list
 
     def exchange_rates(source = 'USD', target = [], date = nil)
-      if date
+      if date && !today?(date)
         provider.historical(source: source, target: target, date: date)
       else
         provider.live(source: source, target: target)
@@ -37,6 +39,10 @@ module CurrencyExchange
     private
 
     attr_reader :provider
+
+    def today?(date)
+      date.strftime('%Y-%m-%d') == Time.now.strftime('%Y-%m-%d')
+    end
 
     def choose_highest(prev_rates, new_rates, date)
       new_rates.each_with_object(prev_rates) do |(symbol, rate), res|

@@ -1,34 +1,31 @@
 module CurrencyExchange
   module Errors
     class ProviderError < StandardError
-      def initialize(provider)
-        @provider = provider
+      attr_reader :message
+
+      def initialize(message)
+        @message = message
+      end
+
+      def to_s
+        message
       end
 
       private
 
-      attr_reader :provider
+      attr_reader :message
     end
 
     class UnexpectedProviderError < ProviderError
-      def message
-        "Unexpected error request for provider #{provider}"
+      def initialize(provider, message)
+        super "Unexpected error (#{provider}): #{message}"
       end
     end
 
     class WrongProviderAccessKey < ProviderError
       def initialize(provider, access_key)
-        super provider
-        @access_key = access_key
+        super "Wrong access key `#{access_key}` for provider `#{provider}`"
       end
-
-      def message
-        "Wrong access key `#{access_key}` for provider `#{provider}`"
-      end
-
-      private
-
-      attr_reader :access_key
     end
   end
 end

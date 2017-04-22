@@ -67,7 +67,7 @@ module CurrencyExchange
         when 101
           raise Errors::WrongProviderAccessKey.new('currency layer', access_key)
         else
-          raise Errors::UnexpectedProviderError, 'currency layer'
+          raise Errors::UnexpectedProviderError.new('currency layer', response['error']['info'])
         end
       end
     end

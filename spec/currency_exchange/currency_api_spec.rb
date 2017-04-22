@@ -19,8 +19,8 @@ RSpec.describe CurrencyExchange::CurrencyApi do
     ).and_return date_rates
   end
 
-  describe '#supported_currencies' do
-    subject { api.supported_currencies }
+  describe '#list' do
+    subject { api.list }
 
     it 'returns all supported rates' do
       is_expected.to equal supported_currencies
@@ -80,7 +80,6 @@ RSpec.describe CurrencyExchange::CurrencyApi do
 
   describe '#highest_rates' do
     subject { api.highest_rates(source, target) }
-    let(:rates_range) { [rates, *[date_rates] * 6] }
     let(:highest_rates) do
       {
         'EUR' => {
@@ -95,7 +94,7 @@ RSpec.describe CurrencyExchange::CurrencyApi do
     end
 
     before do
-      allow(provider).to receive(:historical).and_return(*rates_range)
+      allow(provider).to receive(:historical).and_return date_rates
       Timecop.freeze(Time.now)
     end
 

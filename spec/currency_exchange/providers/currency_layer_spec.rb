@@ -76,10 +76,6 @@ RSpec.describe CurrencyExchange::Providers::CurrencyLayer do
       end
     end
 
-    describe 'when the source is specified' do
-      pending
-    end
-
     describe 'when the access key is wrong' do
       let(:access_key) { 'wrongaccesskey' }
 
