@@ -1,6 +1,7 @@
 require "bundler/setup"
 require "currency_exchange"
 require "webmock/rspec"
+require 'timecop'
 
 WebMock.disable_net_connect!
 require_relative './support/webmock/stubs'

@@ -5,6 +5,8 @@ require 'json'
 module CurrencyExchange
   module Providers
     class CurrencyLayer
+      include Helpers
+
       def initialize(access_key)
         @access_key = access_key
       end
@@ -22,7 +24,7 @@ module CurrencyExchange
           currencies: target.join(',')
         )
         response = request(request_uri)
-        response['quotes']
+        standartize_quotes(response['quotes'])
       end
 
       def historical(date: Time.now, source: 'USD', target: [])
@@ -33,7 +35,7 @@ module CurrencyExchange
           date: date.strftime('%Y-%m-%d')
         )
         response = request(request_uri)
-        response['quotes']
+        standartize_quotes(response['quotes'])
       end
 
       private

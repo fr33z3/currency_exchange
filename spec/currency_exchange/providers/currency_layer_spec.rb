@@ -1,8 +1,10 @@
 require 'spec_helper'
+
 # rubocop:disable Metrics/BlockLength
 RSpec.describe CurrencyExchange::Providers::CurrencyLayer do
   let(:access_key) { CURRENCY_LAYER_ACCESS_KEY }
   let(:provider) { described_class.new(access_key) }
+  include CurrencyExchange::Providers::Helpers
 
   describe '#list' do
     subject { provider.list }
@@ -33,7 +35,10 @@ RSpec.describe CurrencyExchange::Providers::CurrencyLayer do
   end
 
   describe '#live' do
-    let(:quotes) { api_resource(:currency_layer, 'live_without_target')['quotes'] }
+    let(:quotes) do
+      quotes = api_resource(:currency_layer, 'live_without_target')['quotes']
+      standartize_quotes(quotes)
+    end
 
     subject { provider.live }
 
@@ -51,7 +56,10 @@ RSpec.describe CurrencyExchange::Providers::CurrencyLayer do
 
     describe 'when the target is specified' do
       let(:target) { %w[EUR AED] }
-      let(:quotes) { api_resource(:currency_layer, 'live_with_target')['quotes'] }
+      let(:quotes) do
+        quotes = api_resource(:currency_layer, 'live_with_target')['quotes']
+        standartize_quotes(quotes)
+      end
 
       subject { provider.live(target: target) }
 
@@ -94,7 +102,10 @@ RSpec.describe CurrencyExchange::Providers::CurrencyLayer do
       let(:date) { Time.new(2016, 1, 2) }
       subject { provider.historical(date: date) }
 
-      let(:quotes) { api_resource(:currency_layer, 'historical_with_date')['quotes'] }
+      let(:quotes) do
+        quotes = api_resource(:currency_layer, 'historical_with_date')['quotes']
+        standartize_quotes(quotes)
+      end
 
       it 'returns quotes for specified date' do
         is_expected.to match quotes
@@ -106,7 +117,10 @@ RSpec.describe CurrencyExchange::Providers::CurrencyLayer do
       let(:date) { Time.new(2016, 1, 2) }
       subject { provider.historical(date: date, target: target) }
 
-      let(:quotes) { api_resource(:currency_layer, 'historical_with_date_n_target')['quotes'] }
+      let(:quotes) do
+        quotes = api_resource(:currency_layer, 'historical_with_date_n_target')['quotes']
+        standartize_quotes(quotes)
+      end
 
       it 'returns quotes for specified date and currencies' do
         is_expected.to match quotes
