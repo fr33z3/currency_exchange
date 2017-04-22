@@ -3,6 +3,7 @@ lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'currency_exchange/version'
 
+# rubocop:disable Metrics/BlockLength
 Gem::Specification.new do |spec|
   spec.name          = "currency_exchange"
   spec.version       = CurrencyExchange::VERSION
@@ -35,4 +36,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "pry", "~> 0.10"
   spec.add_development_dependency "rubocop", "~> 0.48"
+  spec.add_development_dependency "webmock", "~> 3"
 end
+# rubocop:enable Metrics/BlockLength

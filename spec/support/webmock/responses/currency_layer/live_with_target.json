@@ -1,0 +1,11 @@
+{
+  "success": true,
+  "terms": "https://currencylayer.com/terms",
+  "privacy": "https://currencylayer.com/privacy",
+  "timestamp": 1492864694,
+  "source": "USD",
+  "quotes": {
+    "USDEUR": 0.932104,
+    "USDAED": 3.672504
+  }
+}

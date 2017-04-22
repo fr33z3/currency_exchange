@@ -1,0 +1,7 @@
+{
+  "success": false,
+  "error": {
+    "code": 301,
+    "info": "You have not specified a date. [Required format: date=YYYY-MM-DD]"
+  }
+}
