@@ -30,7 +30,7 @@ opts = Slop.parse(suppress_errors: true) do |o|
 
   o.on '--providers', 'prints supported providers' do
     CurrencyExchange::ProviderMap::PROVIDERS.keys.each do |provider|
-      if provider == CurrencyExchange::CLI::DEFAULT_PROVIDER
+      if provider == CurrencyExchange::ProviderMap::DEFAULT_PROVIDER
         puts "#{provider} (Default)"
       else
         puts provider
@@ -42,8 +42,8 @@ opts = Slop.parse(suppress_errors: true) do |o|
   o.on '--printers', 'prints/sets list of supported printers' do
     CurrencyExchange::Printers::SUPPORTED.keys.each do |printer|
       puts printer
-      exit
     end
+    exit
   end
 
   o.array '--conf_set', 'sets config value (--conf_set key=value)', delimiter: '='
