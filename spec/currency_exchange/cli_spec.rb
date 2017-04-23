@@ -40,7 +40,7 @@ RSpec.describe CurrencyExchange::CLI do
 
     it 'prints data' do
       printers.each do |printer|
-        expect(printer).to have_received(:print_converted).with('USD', data)
+        expect(printer).to have_received(:print_converted).with('USD', value, data)
       end
     end
   end

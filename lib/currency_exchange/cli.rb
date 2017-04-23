@@ -12,7 +12,7 @@ module CurrencyExchange
 
     def list
       data = api.list
-      printers.each do |printer|
+      each_printer do |printer|
         printer.print_list data
       end
     rescue StandardError => e
@@ -22,7 +22,7 @@ module CurrencyExchange
     def convert(value)
       data = api.convert(value, source, target, date)
 
-      printers.each do |printer|
+      each_printer do |printer|
         printer.print_converted(source, value, data)
       end
     rescue StandardError => e
@@ -32,7 +32,7 @@ module CurrencyExchange
     def highest_rates
       data = api.highest_rates(source, target)
 
-      printers.each do |printer|
+      each_printer do |printer|
         printer.print_highest_rates(source, data)
       end
     rescue StandardError => e
@@ -42,7 +42,7 @@ module CurrencyExchange
     def exchange_rates
       data = api.exchange_rates(source, target, date)
 
-      printers.each do |printer|
+      each_printer do |printer|
         printer.print_exchange_rates(source, date, data)
       end
     rescue StandardError => e
@@ -52,6 +52,16 @@ module CurrencyExchange
     private
 
     attr_reader :provider, :provider_map, :api
+
+    def each_printer
+      printers.each do |printer|
+        begin
+          yield printer
+        rescue StandardError => e
+          puts e
+        end
+      end
+    end
 
     def provider
       provider_map.provider(provider_name)
