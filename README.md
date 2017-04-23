@@ -11,6 +11,12 @@ Please set up next next variables for valid work of the gem
 * twitter_consumer_secret
 * twitter_access_token
 * twitter_access_token_secret
+* email_from
+* email_domain (optional)
+* email_server_address
+* email_password
+* email_username
+* email_smtp_port
 
 To use the gem functionality please read the gem for details.
 ```
@@ -37,3 +43,6 @@ To use the gem functionality please read the gem for details.
   exe/currency_exchange --exchange --source USD --target EUR,AUD
   exe/currency_exchange --exchange --source USD --target EUR,AUD --date 2016-01-01
 ```
+
+# Trouble shuting for gmail accounts:
+http://stackoverflow.com/questions/33918448/ruby-sending-mail-via-gmail-smtp

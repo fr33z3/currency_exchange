@@ -49,6 +49,7 @@ opts = Slop.parse(suppress_errors: true) do |o|
   o.array '--conf_set', 'sets config value (--conf_set key=value)', delimiter: '='
 
   o.array '-prt', '--print', 'set up printers (look at supported printers)'
+  o.string '--email_to', 'used with email printer to specify email receiver'
   o.string '-s', '--source', 'set up source (look at supported currencies) default: USD'
   o.array '-t', '--target', 'set up target currencies (ex: EUR,AUD) default: All supported'
   o.string '-d', '--date', 'set up date in format YYYY-MM-DD'
@@ -63,6 +64,7 @@ end
 cli.source = opts[:source].upcase if opts.source?
 cli.target = opts[:target] if opts.target?
 cli.date = Time.new(*opts[:date].split('-')) if opts.date?
+conf[:email_to] = opts[:email_to] if opts.email_to?
 
 if opts.provider?
   begin
@@ -77,7 +79,6 @@ if opts.print?
   printers = CurrencyExchange::Printers.supported_printers(opts[:print])
   cli.printers = printers
 end
-
 
 if opts.conf_set?
   key, value = opts[:conf_set][0..1]

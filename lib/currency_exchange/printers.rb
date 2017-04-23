@@ -2,10 +2,12 @@ module CurrencyExchange
   module Printers
     autoload :Console, 'currency_exchange/printers/console'
     autoload :Twitter, 'currency_exchange/printers/twitter'
+    autoload :Mail, 'currency_exchange/printers/mail'
 
     SUPPORTED = {
       console: Console,
-      twitter: Twitter
+      twitter: Twitter,
+      mail: Mail
     }.freeze
 
     def self.supported_printers(names)

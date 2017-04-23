@@ -8,12 +8,12 @@ module CurrencyExchange
       end
 
       def print_list(list)
-        puts "Printing list to twitter"
+        puts 'Printing list to twitter'
         print_listted_posts(list.join(','))
       end
 
       def print_converted(source, source_value, conversions)
-        puts "Printing conversions to twitter"
+        puts 'Printing conversions to twitter'
         message = conversions.map do |currency, value|
           "#{source_value} #{source} = #{value} #{currency}"
         end.join(',')
@@ -33,7 +33,7 @@ module CurrencyExchange
       end
 
       def print_exchange_rates(source, date, rates)
-        puts "Printing exhcange rates to twitter"
+        puts 'Printing exhcange rates to twitter'
         date_str = (date || Time.now).strftime('%Y-%m-%d')
         message = "#{date_str} " + rates.map do |currency, value|
           "#{source} -> #{currency}: #{value}"
