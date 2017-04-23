@@ -8,8 +8,8 @@ module CurrencyExchange
         end
       end
 
-      def print_converted(source, conversions)
-        puts "Conversions for #{source}"
+      def print_converted(source, source_value, conversions)
+        puts "Conversions for #{source_value} #{source}"
         conversions.each do |currency, value|
           puts "  #{currency} #{value}"
         end

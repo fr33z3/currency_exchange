@@ -23,7 +23,7 @@ module CurrencyExchange
       data = api.convert(value, source, target, date)
 
       printers.each do |printer|
-        printer.print_converted(source, data)
+        printer.print_converted(source, value, data)
       end
     rescue StandardError => e
       puts e
